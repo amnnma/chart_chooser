@@ -55,8 +55,13 @@ function clampZoom(z: number) {
   return Math.min(1.75, Math.max(0.75, z));
 }
 
+function defaultZoomForPreset(id: (typeof PRESETS)[number]["id"]) {
+  return id === "bar_chart" ? 1.25 : 1.2;
+}
+
 export default function TreeEditor() {
-  const preset = PRESETS[0];
+  const [presetId, setPresetId] = useState<(typeof PRESETS)[number]["id"]>(() => PRESETS[0].id);
+  const preset = useMemo(() => PRESETS.find((p) => p.id === presetId) ?? PRESETS[0], [presetId]);
   const styleMode = preset.style;
   const locked = preset.locked;
   const [nodes, setNodes] = useState<TreeState>(() => translateToPositive(preset.nodes));
@@ -67,13 +72,13 @@ export default function TreeEditor() {
   const [quizTrail, setQuizTrail] = useState<string[]>([ROOT_ID]);
   const [quizAnswers, setQuizAnswers] = useState<BranchKind[]>([]);
 
-  const [zoom, setZoom] = useState(1.25);
+  const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id));
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const size = useMemo(() => canvasSize(nodes), [nodes]);
   const editLocked = locked || quizMode;
 
-  const resetZoom = useCallback(() => setZoom(1.25), []);
+  const resetZoom = useCallback(() => setZoom(defaultZoomForPreset(presetId)), [presetId]);
 
   const toCanvasPoint = useCallback(
     (clientX: number, clientY: number) => {
@@ -117,6 +122,34 @@ export default function TreeEditor() {
       behavior: "smooth",
     });
   }, [size.h, size.w]);
+
+  const loadPreset = useCallback(
+    (nextId: (typeof PRESETS)[number]["id"]) => {
+      const nextPreset = PRESETS.find((p) => p.id === nextId) ?? PRESETS[0];
+      const nextZoom = defaultZoomForPreset(nextPreset.id);
+      const root = nextPreset.nodes[ROOT_ID];
+      setPresetId(nextPreset.id);
+      setNodes(translateToPositive(nextPreset.nodes));
+      setSelectedId(ROOT_ID);
+      setQuizMode(false);
+      setQuizId(ROOT_ID);
+      setQuizTrail([ROOT_ID]);
+      setQuizAnswers([]);
+      setZoom(nextZoom);
+
+      requestAnimationFrame(() => {
+        const scroller = scrollRef.current;
+        if (!scroller || !root) return;
+        const rect = scroller.getBoundingClientRect();
+        scroller.scrollTo({
+          left: Math.max(0, root.x * nextZoom - rect.width / 2),
+          top: Math.max(0, root.y * nextZoom - rect.height / 2),
+          behavior: "smooth",
+        });
+      });
+    },
+    [],
+  );
 
   const activeEdges = useMemo(() => {
     if (!quizMode) return undefined;
@@ -209,50 +242,63 @@ export default function TreeEditor() {
           <div className="flex flex-wrap items-center justify-end gap-2">
             <div className="text-xs text-slate-500">{nodeCount} nodes</div>
 
+            <select
+              value={presetId}
+              onChange={(e) => loadPreset(e.target.value as any)}
+              className="rounded-lg border border-black/10 bg-white px-2 py-2 text-sm text-slate-900 shadow-sm hover:bg-slate-50"
+              title="Preset"
+            >
+              {PRESETS.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+
             <button
               onClick={quizMode ? stopQuiz : startQuiz}
               className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
-          >
-            {quizMode ? "Exit quiz" : "Quiz"}
-          </button>
+            >
+              {quizMode ? "Exit quiz" : "Quiz"}
+            </button>
 
-          <div className="hidden items-center gap-1 rounded-lg border border-black/10 bg-white px-1 py-1 shadow-sm sm:flex">
-            <button
-              onClick={() => setZoom((z) => clampZoom(Math.round((z - 0.1) * 100) / 100))}
-              className="rounded-md px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              title="Zoom out"
-            >
-              −
-            </button>
-            <button
-              onClick={resetZoom}
-              className="min-w-[64px] rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
-              title="Reset zoom"
-            >
-              {Math.round(zoom * 100)}%
-            </button>
-            <button
-              onClick={() => setZoom((z) => clampZoom(Math.round((z + 0.1) * 100) / 100))}
-              className="rounded-md px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              title="Zoom in"
-            >
-              +
-            </button>
-            <button
-              onClick={() => focusNode(selectedId ?? ROOT_ID)}
-              className="rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
-              title="Focus selected"
-            >
-              Focus
-            </button>
-            <button
-              onClick={fitToView}
-              className="rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
-              title="Fit to view"
-            >
-              Fit
-            </button>
-          </div>
+            <div className="hidden items-center gap-1 rounded-lg border border-black/10 bg-white px-1 py-1 shadow-sm sm:flex">
+              <button
+                onClick={() => setZoom((z) => clampZoom(Math.round((z - 0.1) * 100) / 100))}
+                className="rounded-md px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                title="Zoom out"
+              >
+                −
+              </button>
+              <button
+                onClick={resetZoom}
+                className="min-w-[64px] rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                title="Reset zoom"
+              >
+                {Math.round(zoom * 100)}%
+              </button>
+              <button
+                onClick={() => setZoom((z) => clampZoom(Math.round((z + 0.1) * 100) / 100))}
+                className="rounded-md px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                title="Zoom in"
+              >
+                +
+              </button>
+              <button
+                onClick={() => focusNode(selectedId ?? ROOT_ID)}
+                className="rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                title="Focus selected"
+              >
+                Focus
+              </button>
+              <button
+                onClick={fitToView}
+                className="rounded-md px-2 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                title="Fit to view"
+              >
+                Fit
+              </button>
+            </div>
           </div>
         </div>
       </header>

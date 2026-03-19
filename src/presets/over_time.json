@@ -1,0 +1,130 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Enough values to estimate pattern of change?\n(มีข้อมูลมากพอจะเห็นแนวโน้มไหม?)",
+    "kind": "decision",
+    "x": 360,
+    "y": 320,
+    "yes": "q_regular",
+    "no": "o_dot",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+  "q_regular": {
+    "id": "q_regular",
+    "label": "Values occur at regular intervals of time?\n(ข้อมูลมาเป็นช่วงเวลาสม่ำเสมอไหม?)",
+    "kind": "decision",
+    "x": 560,
+    "y": 320,
+    "yes": "q_rank",
+    "no": "q_persistent",
+    "colorIdx": 2
+  },
+  "q_persistent": {
+    "id": "q_persistent",
+    "label": "Values persistent until they change?\n(ค่าคงเดิมจนกว่าจะมีการอัปเดตไหม?)",
+    "kind": "decision",
+    "x": 760,
+    "y": 320,
+    "yes": "o_step",
+    "no": "o_thin_bar",
+    "colorIdx": 3
+  },
+  "q_rank": {
+    "id": "q_rank",
+    "label": "More important to feature changes in rank?\n(อยากเน้นการเปลี่ยนอันดับไหม?)",
+    "kind": "decision",
+    "x": 760,
+    "y": 220,
+    "yes": "o_bumps",
+    "no": "q_patterns",
+    "colorIdx": 4
+  },
+  "q_patterns": {
+    "id": "q_patterns",
+    "label": "More important to feature patterns of change?\n(อยากเน้นแนวโน้ม/รูปแบบการเปลี่ยนแปลงไหม?)",
+    "kind": "decision",
+    "x": 940,
+    "y": 220,
+    "yes": "o_line",
+    "no": "o_bar",
+    "colorIdx": 5
+  },
+  "o_dot": {
+    "id": "o_dot",
+    "label": "Use a Dot Plot\n(แนะนำ: Dot plot)",
+    "kind": "outcome",
+    "x": 560,
+    "y": 470,
+    "yes": null,
+    "no": null,
+    "colorIdx": 1,
+    "variant": "chart"
+  },
+  "o_step": {
+    "id": "o_step",
+    "label": "Use a Step Chart\n(แนะนำ: Step chart)",
+    "kind": "outcome",
+    "x": 980,
+    "y": 320,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  },
+  "o_thin_bar": {
+    "id": "o_thin_bar",
+    "label": "Use a Thin Bar Chart\n(แนะนำ: Thin bar chart)",
+    "kind": "outcome",
+    "x": 980,
+    "y": 420,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  },
+  "o_bumps": {
+    "id": "o_bumps",
+    "label": "Use a Bump Chart\n(แนะนำ: Bump chart)",
+    "kind": "outcome",
+    "x": 1160,
+    "y": 80,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "o_line": {
+    "id": "o_line",
+    "label": "Use a Standard Line Chart\n(แนะนำ: Standard line chart)",
+    "kind": "outcome",
+    "x": 1160,
+    "y": 170,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "o_bar": {
+    "id": "o_bar",
+    "label": "Use a Bar Chart\n(แนะนำ: Bar chart)",
+    "kind": "outcome",
+    "x": 1160,
+    "y": 260,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  }
+}

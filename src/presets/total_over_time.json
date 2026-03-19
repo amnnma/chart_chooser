@@ -1,0 +1,154 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Important to show how total (as well as parts) changed over time?\n(ต้องการให้เห็น “ยอดรวม” เปลี่ยนอย่างไรด้วยไหม?)",
+    "kind": "decision",
+    "x": 420,
+    "y": 320,
+    "yes": "q_yes_parts",
+    "no": "q_no_parts",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+
+  "q_no_parts": {
+    "id": "q_no_parts",
+    "label": "More important: comparison of parts?\n(อยากเน้นเทียบส่วนย่อยไหม?)",
+    "kind": "decision",
+    "x": 700,
+    "y": 220,
+    "yes": "o_line_variant",
+    "no": "q_no_fractions",
+    "colorIdx": 2
+  },
+  "q_no_fractions": {
+    "id": "q_no_fractions",
+    "label": "More important: fractions of total?\n(อยากเน้นสัดส่วนของยอดรวมไหม?)",
+    "kind": "decision",
+    "x": 940,
+    "y": 220,
+    "yes": "q_no_patterns",
+    "no": "o_line_variant",
+    "colorIdx": 3
+  },
+  "q_no_patterns": {
+    "id": "q_no_patterns",
+    "label": "Need to feature patterns of change?\n(อยากเน้นแนวโน้ม/รูปแบบการเปลี่ยนแปลงไหม?)",
+    "kind": "decision",
+    "x": 1180,
+    "y": 220,
+    "yes": "o_100_area",
+    "no": "o_100_bars",
+    "colorIdx": 4
+  },
+
+  "q_yes_parts": {
+    "id": "q_yes_parts",
+    "label": "More important: comparison of parts?\n(อยากเน้นเทียบส่วนย่อยไหม?)",
+    "kind": "decision",
+    "x": 700,
+    "y": 420,
+    "yes": "o_line_total",
+    "no": "q_yes_fractions",
+    "colorIdx": 5
+  },
+  "q_yes_fractions": {
+    "id": "q_yes_fractions",
+    "label": "More important: fractions of total?\n(อยากเน้นสัดส่วนของยอดรวมไหม?)",
+    "kind": "decision",
+    "x": 940,
+    "y": 420,
+    "yes": "q_yes_patterns",
+    "no": "o_line_total",
+    "colorIdx": 6
+  },
+  "q_yes_patterns": {
+    "id": "q_yes_patterns",
+    "label": "Need to feature patterns of change?\n(อยากเน้นแนวโน้ม/รูปแบบการเปลี่ยนแปลงไหม?)",
+    "kind": "decision",
+    "x": 1180,
+    "y": 420,
+    "yes": "o_stacked_area",
+    "no": "o_stacked_bars",
+    "colorIdx": 7
+  },
+
+  "o_line_variant": {
+    "id": "o_line_variant",
+    "label": "Use a Line Chart (or variant)\n(แนะนำ: Line chart / variant)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 160,
+    "yes": null,
+    "no": null,
+    "colorIdx": 2,
+    "variant": "chart"
+  },
+  "o_100_area": {
+    "id": "o_100_area",
+    "label": "Use a 100% Stacked Area Chart\n(แนะนำ: 100% stacked area)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 240,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "o_100_bars": {
+    "id": "o_100_bars",
+    "label": "Use 100% Stacked Bars\n(แนะนำ: 100% stacked bars)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 320,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+
+  "o_line_total": {
+    "id": "o_line_total",
+    "label": "Use a Line Chart (or variant) with total\n(แนะนำ: Line chart / variant + total)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 420,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "o_stacked_area": {
+    "id": "o_stacked_area",
+    "label": "Use a Stacked Area Chart\n(แนะนำ: Stacked area)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 500,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  },
+  "o_stacked_bars": {
+    "id": "o_stacked_bars",
+    "label": "Use Stacked Bars\n(แนะนำ: Stacked bars)",
+    "kind": "outcome",
+    "x": 1460,
+    "y": 580,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  }
+}

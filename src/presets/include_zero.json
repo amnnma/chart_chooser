@@ -1,0 +1,142 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Distance between zero and nearest value < spread of values?\n(ระยะจาก 0 ถึงค่าที่ใกล้สุด น้อยกว่าช่วงกระจายของข้อมูลไหม?)",
+    "kind": "decision",
+    "x": 420,
+    "y": 320,
+    "yes": "o_extend_zero",
+    "no": "q_ratio",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+
+  "q_ratio": {
+    "id": "q_ratio",
+    "label": "Is scale a ratio scale?\n(เป็นข้อมูลแบบอัตราส่วน เช่น น้ำหนัก/ระยะทาง ไหม?)",
+    "kind": "decision",
+    "x": 680,
+    "y": 320,
+    "yes": "q_narrow_far",
+    "no": "o_extend_zero",
+    "colorIdx": 2
+  },
+  "q_narrow_far": {
+    "id": "q_narrow_far",
+    "label": "All values within a narrow range far from zero?\n(ค่าข้อมูลอยู่ในช่วงแคบๆ และไกลจาก 0 ไหม?)",
+    "kind": "decision",
+    "x": 940,
+    "y": 320,
+    "yes": "q_small_diffs",
+    "no": "o_extend_zero",
+    "colorIdx": 3
+  },
+  "q_small_diffs": {
+    "id": "q_small_diffs",
+    "label": "Need to show small differences clearly?\n(อยากให้เห็นความต่างเล็กๆ ชัดเจนไหม?)",
+    "kind": "decision",
+    "x": 1200,
+    "y": 320,
+    "yes": "q_invisible_if_zero",
+    "no": "o_extend_zero",
+    "colorIdx": 4
+  },
+
+  "q_invisible_if_zero": {
+    "id": "q_invisible_if_zero",
+    "label": "Differences among values invisible when scale includes zero?\n(ถ้าเริ่มที่ 0 จะทำให้ความต่างแทบมองไม่ออกไหม?)",
+    "kind": "decision",
+    "x": 1460,
+    "y": 260,
+    "yes": "o_optional_zero",
+    "no": "q_irrelevant",
+    "colorIdx": 5
+  },
+  "q_irrelevant": {
+    "id": "q_irrelevant",
+    "label": "Distance from zero truly irrelevant to the purpose?\n(ระยะจาก 0 ไม่เกี่ยวกับประเด็นที่ต้องสื่อเลยไหม?)",
+    "kind": "decision",
+    "x": 1460,
+    "y": 380,
+    "yes": "o_no_zero_avoid_bars",
+    "no": "q_audience_context",
+    "colorIdx": 6
+  },
+  "q_audience_context": {
+    "id": "q_audience_context",
+    "label": "Audience already has a sense of the scale?\n(คนดูคุ้นกับสเกลนี้อยู่แล้วไหม?)",
+    "kind": "decision",
+    "x": 1720,
+    "y": 380,
+    "yes": "o_no_zero",
+    "no": "o_zero_inset",
+    "colorIdx": 7
+  },
+
+  "o_extend_zero": {
+    "id": "o_extend_zero",
+    "label": "Extend scale to zero.\n(เริ่มสเกลที่ 0)",
+    "kind": "outcome",
+    "x": 940,
+    "y": 520,
+    "yes": null,
+    "no": null,
+    "colorIdx": 1,
+    "variant": "chart"
+  },
+  "o_optional_zero": {
+    "id": "o_optional_zero",
+    "label": "Optionally extend scale to zero.\n(อาจเริ่มที่ 0 ก็ได้ ขึ้นกับบริบท)\nNote: avoid length/area-encoded charts like Bar/Stacked bar/Stacked area; prefer labels.",
+    "kind": "outcome",
+    "x": 1720,
+    "y": 220,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "o_no_zero_avoid_bars": {
+    "id": "o_no_zero_avoid_bars",
+    "label": "Don't extend scale to zero.\n(ไม่จำเป็นต้องเริ่มที่ 0)\nNote: avoid Bar/Stacked bar/Stacked area.",
+    "kind": "outcome",
+    "x": 1720,
+    "y": 340,
+    "yes": null,
+    "no": null,
+    "colorIdx": 6,
+    "variant": "chart"
+  },
+  "o_no_zero": {
+    "id": "o_no_zero",
+    "label": "Don't extend scale to zero.\n(ไม่จำเป็นต้องเริ่มที่ 0)",
+    "kind": "outcome",
+    "x": 1980,
+    "y": 380,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  },
+  "o_zero_inset": {
+    "id": "o_zero_inset",
+    "label": "Extend scale to zero and add an inset chart.\n(เริ่มที่ 0 และทำ inset chart เพื่อขยายให้ดูชัด)",
+    "kind": "outcome",
+    "x": 1980,
+    "y": 460,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Calculate the “10%–20% below the spread” lower limit.\n(คำนวณค่าต่ำกว่าช่วงข้อมูล 10%–20%)",
+    "kind": "decision",
+    "x": 420,
+    "y": 320,
+    "yes": "q_theoretical_min",
+    "no": "q_theoretical_min",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+
+  "q_theoretical_min": {
+    "id": "q_theoretical_min",
+    "label": "Does the data have a lowest possible value?\n(มี “ค่าต่ำสุดที่เป็นไปได้” ไหม?)",
+    "kind": "decision",
+    "x": 700,
+    "y": 320,
+    "yes": "q_below_theoretical",
+    "no": "q_need_zero_no_theory",
+    "colorIdx": 2
+  },
+
+  "q_below_theoretical": {
+    "id": "q_below_theoretical",
+    "label": "Is the 10%–20% limit lower than the lowest possible value?\n(ค่าที่คำนวณได้ต่ำกว่า “ค่าต่ำสุดที่เป็นไปได้” ไหม?)",
+    "kind": "decision",
+    "x": 980,
+    "y": 240,
+    "yes": "o_theoretical_min",
+    "no": "q_need_zero_theory",
+    "colorIdx": 3
+  },
+
+  "q_need_zero_theory": {
+    "id": "q_need_zero_theory",
+    "label": "Does the scale need to be extended to zero?\n(ต้องเริ่มสเกลที่ 0 ไหม?)",
+    "kind": "decision",
+    "x": 1260,
+    "y": 240,
+    "yes": "o_zero",
+    "no": "q_zero_closer_theory",
+    "colorIdx": 4
+  },
+
+  "q_zero_closer_theory": {
+    "id": "q_zero_closer_theory",
+    "label": "Is zero closer to the lowest value than the highest value is?\n(0 ใกล้ค่าต่ำสุดมากกว่าค่าสูงสุดไหม?)",
+    "kind": "decision",
+    "x": 1540,
+    "y": 240,
+    "yes": "o_zero",
+    "no": "o_10_20",
+    "colorIdx": 5
+  },
+
+  "q_need_zero_no_theory": {
+    "id": "q_need_zero_no_theory",
+    "label": "Does the scale need to be extended to zero?\n(ต้องเริ่มสเกลที่ 0 ไหม?)",
+    "kind": "decision",
+    "x": 980,
+    "y": 400,
+    "yes": "o_zero",
+    "no": "q_zero_closer_no_theory",
+    "colorIdx": 6
+  },
+
+  "q_zero_closer_no_theory": {
+    "id": "q_zero_closer_no_theory",
+    "label": "Is zero closer to the lowest value than the highest value is?\n(0 ใกล้ค่าต่ำสุดมากกว่าค่าสูงสุดไหม?)",
+    "kind": "decision",
+    "x": 1260,
+    "y": 400,
+    "yes": "o_zero",
+    "no": "o_10_20",
+    "colorIdx": 7
+  },
+
+  "o_theoretical_min": {
+    "id": "o_theoretical_min",
+    "label": "Go with the lowest possible value.\n(ใช้ “ค่าต่ำสุดที่เป็นไปได้” เป็นจุดเริ่มต้น)",
+    "kind": "outcome",
+    "x": 1540,
+    "y": 120,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  },
+  "o_zero": {
+    "id": "o_zero",
+    "label": "Go with zero.\n(ใช้ 0 เป็นจุดเริ่มต้น)",
+    "kind": "outcome",
+    "x": 1760,
+    "y": 340,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "o_10_20": {
+    "id": "o_10_20",
+    "label": "Go with 10%–20% below the spread.\n(ใช้ค่า 10%–20% ต่ำกว่าช่วงข้อมูลเป็นจุดเริ่มต้น)",
+    "kind": "outcome",
+    "x": 1760,
+    "y": 240,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  }
+}

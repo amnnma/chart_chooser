@@ -1,0 +1,149 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 340,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Are values parts of a total?\n(เป็นส่วนหนึ่งของยอดรวมไหม?)",
+    "kind": "decision",
+    "x": 340,
+    "y": 340,
+    "yes": "q_all_parts",
+    "no": "o_bar_total",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+  "q_all_parts": {
+    "id": "q_all_parts",
+    "label": "Are all parts shown?\n(มีชิ้นส่วนครบไหม?)",
+    "kind": "decision",
+    "x": 540,
+    "y": 340,
+    "yes": "q_overlap",
+    "no": "o_bar_total",
+    "colorIdx": 2
+  },
+  "q_overlap": {
+    "id": "q_overlap",
+    "label": "Do parts overlap?\n(มีส่วนที่ซ้ำ/ทับกันไหม?)",
+    "kind": "decision",
+    "x": 740,
+    "y": 340,
+    "yes": "o_bar_total",
+    "no": "q_precise",
+    "colorIdx": 3
+  },
+  "q_precise": {
+    "id": "q_precise",
+    "label": "Need to compare parts very precisely?\n(ต้องเทียบชิ้นส่วนให้แม่นมากไหม?)",
+    "kind": "decision",
+    "x": 940,
+    "y": 340,
+    "yes": "o_bar_total",
+    "no": "q_mix_pos_neg",
+    "colorIdx": 4
+  },
+  "q_mix_pos_neg": {
+    "id": "q_mix_pos_neg",
+    "label": "Mix of positive and negative parts?\n(มีทั้งค่าบวกและค่าลบไหม?)",
+    "kind": "decision",
+    "x": 1140,
+    "y": 340,
+    "yes": "q_cum_subtotals",
+    "no": "q_fewer_parts",
+    "colorIdx": 5
+  },
+  "q_cum_subtotals": {
+    "id": "q_cum_subtotals",
+    "label": "More important to feature cumulative subtotals?\n(อยากเน้นผลรวมย่อย/สะสมไหม?)",
+    "kind": "decision",
+    "x": 1340,
+    "y": 280,
+    "yes": "o_waterfall",
+    "no": "o_bar_total",
+    "colorIdx": 6
+  },
+  "q_fewer_parts": {
+    "id": "q_fewer_parts",
+    "label": "Fewer than 6–7 parts?\n(มีชิ้นส่วนไม่เกิน 6–7 ชิ้นไหม?)",
+    "kind": "decision",
+    "x": 1340,
+    "y": 400,
+    "yes": "q_feature",
+    "no": "o_treemap",
+    "colorIdx": 7
+  },
+  "q_feature": {
+    "id": "q_feature",
+    "label": "More important to feature cumulative subtotals?\n(อยากเน้นผลรวมย่อย/สะสมไหม?)",
+    "kind": "decision",
+    "x": 1540,
+    "y": 400,
+    "yes": "o_stacked_bar",
+    "no": "o_pie",
+    "colorIdx": 0
+  },
+  "o_bar_total": {
+    "id": "o_bar_total",
+    "label": "Use a Bar Chart (with or without a \"total\" bar)",
+    "kind": "outcome",
+    "x": 1540,
+    "y": 520,
+    "yes": null,
+    "no": null,
+    "colorIdx": 2,
+    "variant": "chart"
+  },
+  "o_waterfall": {
+    "id": "o_waterfall",
+    "label": "Use a Waterfall Chart",
+    "kind": "outcome",
+    "x": 1540,
+    "y": 260,
+    "yes": null,
+    "no": null,
+    "colorIdx": 6,
+    "variant": "chart"
+  },
+  "o_treemap": {
+    "id": "o_treemap",
+    "label": "Use a Treemap",
+    "kind": "outcome",
+    "x": 1540,
+    "y": 460,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  },
+  "o_stacked_bar": {
+    "id": "o_stacked_bar",
+    "label": "Use a Stacked Bar Chart",
+    "kind": "outcome",
+    "x": 1740,
+    "y": 360,
+    "yes": null,
+    "no": null,
+    "colorIdx": 0,
+    "variant": "chart"
+  },
+  "o_pie": {
+    "id": "o_pie",
+    "label": "Use a Pie Chart",
+    "kind": "outcome",
+    "x": 1740,
+    "y": 440,
+    "yes": null,
+    "no": null,
+    "colorIdx": 0,
+    "variant": "chart"
+  }
+}

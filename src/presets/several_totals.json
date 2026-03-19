@@ -1,0 +1,110 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Are values parts of totals?\n(เป็นส่วนของยอดรวมแต่ละก้อนไหม?)",
+    "kind": "decision",
+    "x": 360,
+    "y": 320,
+    "yes": "q_all_parts",
+    "no": "o_merged",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+  "q_all_parts": {
+    "id": "q_all_parts",
+    "label": "Do values include all parts of all totals?\n(มีชิ้นส่วนครบของทุกยอดรวมไหม?)",
+    "kind": "decision",
+    "x": 600,
+    "y": 320,
+    "yes": "q_same_measure",
+    "no": "o_merged",
+    "colorIdx": 2
+  },
+  "q_same_measure": {
+    "id": "q_same_measure",
+    "label": "Are values all same measure (e.g., donation dollars)?\n(หน่วยวัดเดียวกันไหม?)",
+    "kind": "decision",
+    "x": 840,
+    "y": 320,
+    "yes": "q_feature_parts",
+    "no": "o_merged",
+    "colorIdx": 3
+  },
+
+  "q_feature_parts": {
+    "id": "q_feature_parts",
+    "label": "More important: precise comparison of parts?\n(อยากเทียบชิ้นส่วนให้แม่นกว่า (ยอดรวมคร่าวๆ) ไหม?)",
+    "kind": "decision",
+    "x": 1080,
+    "y": 260,
+    "yes": "o_clustered",
+    "no": "q_feature_totals",
+    "colorIdx": 4
+  },
+  "q_feature_totals": {
+    "id": "q_feature_totals",
+    "label": "More important: precise comparison of totals?\n(อยากเทียบยอดรวมให้แม่นกว่า (ชิ้นส่วนคร่าวๆ) ไหม?)",
+    "kind": "decision",
+    "x": 1080,
+    "y": 380,
+    "yes": "o_stacked",
+    "no": "o_pies",
+    "colorIdx": 5
+  },
+
+  "o_merged": {
+    "id": "o_merged",
+    "label": "Use a Merged Bar Chart\n(แนะนำ: Merged bar chart)",
+    "kind": "outcome",
+    "x": 1260,
+    "y": 520,
+    "yes": null,
+    "no": null,
+    "colorIdx": 1,
+    "variant": "chart"
+  },
+  "o_clustered": {
+    "id": "o_clustered",
+    "label": "Use a Clustered Bar Chart\n(แนะนำ: Clustered bar chart)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 240,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "o_stacked": {
+    "id": "o_stacked",
+    "label": "Use a Stacked Bar Chart\n(แนะนำ: Stacked bar chart)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 380,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "o_pies": {
+    "id": "o_pies",
+    "label": "Use Pie Charts (small multiples)\n(แนะนำ: Pie charts หลายๆ วง)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 460,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  }
+}

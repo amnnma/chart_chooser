@@ -1,0 +1,161 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "Are categories sequential?",
+    "kind": "decision",
+    "x": 300,
+    "y": 320,
+    "yes": "need_feature",
+    "no": "breakdown_total",
+    "colorIdx": 0,
+    "isRoot": true
+  },
+  "need_feature": {
+    "id": "need_feature",
+    "label": "Need to feature…",
+    "kind": "decision",
+    "x": 280,
+    "y": 120,
+    "yes": "line_chart",
+    "no": "line_chart",
+    "colorIdx": 1
+  },
+  "line_chart": {
+    "id": "line_chart",
+    "label": "Use a Line Chart",
+    "kind": "outcome",
+    "x": 900,
+    "y": 110,
+    "yes": null,
+    "no": null,
+    "colorIdx": 1,
+    "variant": "chart"
+  },
+  "breakdown_total": {
+    "id": "breakdown_total",
+    "label": "Is data the breakdown of total(s)?",
+    "kind": "decision",
+    "x": 470,
+    "y": 320,
+    "yes": "need_compare",
+    "no": "assoc_locations",
+    "colorIdx": 2
+  },
+  "need_compare": {
+    "id": "need_compare",
+    "label": "Need to compare…",
+    "kind": "decision",
+    "x": 520,
+    "y": 200,
+    "yes": "pie_chart",
+    "no": "more_important",
+    "colorIdx": 3
+  },
+  "pie_chart": {
+    "id": "pie_chart",
+    "label": "Use a Pie Chart",
+    "kind": "outcome",
+    "x": 900,
+    "y": 200,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  },
+  "more_important": {
+    "id": "more_important",
+    "label": "What’s more important?",
+    "kind": "decision",
+    "x": 660,
+    "y": 220,
+    "yes": "map_variant",
+    "no": "bar_chart",
+    "colorIdx": 4
+  },
+  "map_variant": {
+    "id": "map_variant",
+    "label": "Use a Choropleth Map",
+    "kind": "outcome",
+    "x": 900,
+    "y": 300,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "bar_chart": {
+    "id": "bar_chart",
+    "label": "Use a Bar Chart",
+    "kind": "outcome",
+    "x": 900,
+    "y": 380,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "assoc_locations": {
+    "id": "assoc_locations",
+    "label": "Is data associated with locations?",
+    "kind": "decision",
+    "x": 640,
+    "y": 320,
+    "yes": "map_variant",
+    "no": "how_many_series",
+    "colorIdx": 6
+  },
+  "how_many_series": {
+    "id": "how_many_series",
+    "label": "How many data series?",
+    "kind": "decision",
+    "x": 760,
+    "y": 320,
+    "yes": "same_measure",
+    "no": "bar_chart",
+    "colorIdx": 7
+  },
+  "same_measure": {
+    "id": "same_measure",
+    "label": "Are all values same measure\n(e.g., all expense dollars)?",
+    "kind": "decision",
+    "x": 760,
+    "y": 520,
+    "yes": "clustered_bar",
+    "no": "merged_bar",
+    "colorIdx": 0
+  },
+  "clustered_bar": {
+    "id": "clustered_bar",
+    "label": "Use a Clustered Bar Chart",
+    "kind": "outcome",
+    "x": 900,
+    "y": 500,
+    "yes": null,
+    "no": null,
+    "colorIdx": 2,
+    "variant": "chart"
+  },
+  "merged_bar": {
+    "id": "merged_bar",
+    "label": "Use a Merged Bar Chart",
+    "kind": "outcome",
+    "x": 900,
+    "y": 580,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  }
+}
+

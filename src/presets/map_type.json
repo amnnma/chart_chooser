@@ -1,0 +1,206 @@
+{
+  "start": {
+    "id": "start",
+    "label": "Start here",
+    "kind": "decision",
+    "x": 120,
+    "y": 320,
+    "yes": "root",
+    "no": null,
+    "colorIdx": 0,
+    "variant": "start"
+  },
+  "root": {
+    "id": "root",
+    "label": "What's more important?\n(อะไรสำคัญกว่ากัน?)\nPrecise comparison vs Locations of values",
+    "kind": "decision",
+    "x": 360,
+    "y": 320,
+    "yes": "o_non_map",
+    "no": "q_over_time",
+    "colorIdx": 1,
+    "isRoot": true
+  },
+  "q_over_time": {
+    "id": "q_over_time",
+    "label": "Over time?\n(มีการเปลี่ยนแปลงตามเวลาหรือไม่?)",
+    "kind": "decision",
+    "x": 600,
+    "y": 320,
+    "yes": "o_lines",
+    "no": "pref_regions",
+    "colorIdx": 2
+  },
+
+  "pref_regions": {
+    "id": "pref_regions",
+    "label": "Personal preference:\nPrefer colored regions?\n(ชอบระบายสีลงในพื้นที่?)",
+    "kind": "decision",
+    "x": 840,
+    "y": 240,
+    "yes": "q_regions_sizes",
+    "no": "pref_dots",
+    "colorIdx": 3
+  },
+  "q_regions_sizes": {
+    "id": "q_regions_sizes",
+    "label": "Regions very different sizes?\n(พื้นที่แต่ละเขตขนาดต่างกันมากไหม?)",
+    "kind": "decision",
+    "x": 1080,
+    "y": 240,
+    "yes": "pref_regions",
+    "no": "o_choropleth",
+    "colorIdx": 4
+  },
+
+  "pref_dots": {
+    "id": "pref_dots",
+    "label": "Personal preference:\nPrefer colored dots?\n(ชอบแบบจุดสีไหม?)",
+    "kind": "decision",
+    "x": 840,
+    "y": 320,
+    "yes": "o_colored_dots",
+    "no": "pref_tiles",
+    "colorIdx": 5
+  },
+
+  "pref_tiles": {
+    "id": "pref_tiles",
+    "label": "Personal preference:\nPrefer colored tiles?\n(ชอบแบบตารางสีไหม?)",
+    "kind": "decision",
+    "x": 840,
+    "y": 400,
+    "yes": "q_geo_important",
+    "no": "pref_bars_bubbles",
+    "colorIdx": 6
+  },
+  "q_geo_important": {
+    "id": "q_geo_important",
+    "label": "Underlying geography important?\n(ต้องการคงรูปร่างภูมิศาสตร์จริงไหม?)",
+    "kind": "decision",
+    "x": 1080,
+    "y": 400,
+    "yes": "pref_regions",
+    "no": "o_tile_map",
+    "colorIdx": 7
+  },
+
+  "pref_bars_bubbles": {
+    "id": "pref_bars_bubbles",
+    "label": "Personal preference:\nBars or bubbles?\n(ชอบแบบแท่งหรือบับเบิลไหม?)",
+    "kind": "decision",
+    "x": 840,
+    "y": 500,
+    "yes": "q_close_zero",
+    "no": "o_colored_dots",
+    "colorIdx": 0
+  },
+  "q_close_zero": {
+    "id": "q_close_zero",
+    "label": "One or more values very close to zero?\n(มีค่าที่ใกล้ 0 มากไหม?)",
+    "kind": "decision",
+    "x": 1080,
+    "y": 500,
+    "yes": "pref_regions",
+    "no": "q_narrow_range",
+    "colorIdx": 1
+  },
+  "q_narrow_range": {
+    "id": "q_narrow_range",
+    "label": "All values in narrow range AND need to show small differences?\n(ค่าทั้งหมดอยู่ช่วงแคบและต้องโชว์ความต่างเล็กๆ ไหม?)",
+    "kind": "decision",
+    "x": 1320,
+    "y": 500,
+    "yes": "pref_regions",
+    "no": "q_bubbles_vs_bars",
+    "colorIdx": 2
+  },
+  "q_bubbles_vs_bars": {
+    "id": "q_bubbles_vs_bars",
+    "label": "What's more important?\nA bit easier to spot spatial patterns?\n(อยากเห็นแพตเทิร์นเชิงพื้นที่ง่ายขึ้นไหม?)",
+    "kind": "decision",
+    "x": 1560,
+    "y": 500,
+    "yes": "o_bubbles",
+    "no": "o_bars",
+    "colorIdx": 3
+  },
+
+  "o_non_map": {
+    "id": "o_non_map",
+    "label": "Use a non-map chart.\n(แนะนำ: ใช้กราฟที่ไม่ใช่แผนที่ เช่น Bar/Line)",
+    "kind": "outcome",
+    "x": 760,
+    "y": 140,
+    "yes": null,
+    "no": null,
+    "colorIdx": 1,
+    "variant": "chart"
+  },
+  "o_lines": {
+    "id": "o_lines",
+    "label": "Use Lines on a map.\n(แนะนำ: เส้นบนแผนที่)",
+    "kind": "outcome",
+    "x": 840,
+    "y": 180,
+    "yes": null,
+    "no": null,
+    "colorIdx": 2,
+    "variant": "chart"
+  },
+  "o_choropleth": {
+    "id": "o_choropleth",
+    "label": "Use a Choropleth Map.\n(แนะนำ: Choropleth map)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 240,
+    "yes": null,
+    "no": null,
+    "colorIdx": 4,
+    "variant": "chart"
+  },
+  "o_colored_dots": {
+    "id": "o_colored_dots",
+    "label": "Use Colored Dots on a Map.\n(แนะนำ: Colored dots)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 320,
+    "yes": null,
+    "no": null,
+    "colorIdx": 5,
+    "variant": "chart"
+  },
+  "o_tile_map": {
+    "id": "o_tile_map",
+    "label": "Use a Tile Map.\n(แนะนำ: Tile map)",
+    "kind": "outcome",
+    "x": 1320,
+    "y": 400,
+    "yes": null,
+    "no": null,
+    "colorIdx": 7,
+    "variant": "chart"
+  },
+  "o_bubbles": {
+    "id": "o_bubbles",
+    "label": "Use Bubbles on a Map.\n(แนะนำ: Bubbles on map)",
+    "kind": "outcome",
+    "x": 1760,
+    "y": 460,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  },
+  "o_bars": {
+    "id": "o_bars",
+    "label": "Use Bars on a Map.\n(แนะนำ: Bars on map)",
+    "kind": "outcome",
+    "x": 1760,
+    "y": 560,
+    "yes": null,
+    "no": null,
+    "colorIdx": 3,
+    "variant": "chart"
+  }
+}
