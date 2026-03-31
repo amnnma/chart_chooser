@@ -36,7 +36,7 @@ export default function Arrows({ nodes, styleMode = "color", activeEdges, dimIna
     const midY = (sy + ty) / 2;
     const edgeKey = `${fromId}->${toId}`;
     const isActive = activeEdges ? activeEdges.has(edgeKey) : false;
-    const inactiveOpacity = dimInactive ? 0.18 : styleMode === "neutral" ? 1 : 0.85;
+    const inactiveOpacity = dimInactive ? 0.35 : styleMode === "neutral" ? 1 : 0.85;
 
     lines.push(
       <g key={`${fromId}-${toId}-${branch}`}>
@@ -57,7 +57,7 @@ export default function Arrows({ nodes, styleMode = "color", activeEdges, dimIna
             fontSize={10}
             fill={labelColor}
             fontWeight={700}
-            opacity={isActive ? 1 : dimInactive ? 0.25 : 1}
+            opacity={isActive ? 1 : dimInactive ? 0.45 : 1}
           >
             {branch === "yes" ? "Yes" : "No"}
           </text>

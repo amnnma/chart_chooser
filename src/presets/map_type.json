@@ -48,8 +48,8 @@
     "kind": "decision",
     "x": 1080,
     "y": 240,
-    "yes": "pref_regions",
-    "no": "o_choropleth",
+    "yes": "o_choropleth",
+    "no": "pref_regions",
     "colorIdx": 4
   },
 
@@ -92,9 +92,10 @@
     "x": 840,
     "y": 500,
     "yes": "q_close_zero",
-    "no": "o_colored_dots",
+    "no": "pref_tiles",
     "colorIdx": 0
   },
+
   "q_close_zero": {
     "id": "q_close_zero",
     "label": "One or more values very close to zero?\n(มีค่าที่ใกล้ 0 มากไหม?)",

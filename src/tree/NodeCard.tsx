@@ -108,7 +108,8 @@ export default function NodeCard({
         zIndex: selected ? 10 : 5,
         opacity: dimmed ? 0.28 : 1,
       }}
-      className="select-none"
+      className="select-none group"
+      title={`Click to select · ${locked ? "Locked" : "Drag to move"}`}
     >
       {current ? (
         <div
@@ -124,23 +125,33 @@ export default function NodeCard({
       ) : null}
       {node.variant === "start" ? (
         <div style={{ fontSize: 14, fontWeight: 700, color: "rgba(34,197,94,0.95)", textAlign: "center" }}>
-          Start
-          <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(34,197,94,0.95)" }}>here</div>
+          🏁
+          <div style={{ fontSize: 12, fontWeight: 700, color: "rgba(34,197,94,0.95)" }}>Start</div>
         </div>
       ) : (
         <>
+          <div
+            style={{
+              fontSize: 16,
+              marginBottom: 4,
+              textAlign: "center",
+            }}
+          >
+            {node.kind === "outcome" ? "✅" : "❓"}
+          </div>
           {styleMode === "neutral" ? null : (
             <div
               style={{
-                fontSize: 10,
+                fontSize: 9,
                 fontWeight: 600,
                 color: border,
-                marginBottom: 2,
+                marginBottom: 4,
                 textTransform: "uppercase",
                 letterSpacing: 0.5,
+                textAlign: "center",
               }}
             >
-              {node.kind === "outcome" ? "Outcome" : "Decision"}
+              {node.kind === "outcome" ? "คำตอบ" : "คำถาม"}
             </div>
           )}
           <div
