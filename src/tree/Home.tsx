@@ -3,8 +3,8 @@ import type { TreePreset } from "./presets";
 export type HomeProps = {
   presets: TreePreset[];
   onSelectPreset: (id: string) => void;
+  onStartPresetQuiz: (id: string) => void;
   onStartBeginnerGuide: () => void;
-  onPreviewPreset?: (id: string) => void;
 };
 
 const GUIDE_PATHS = {
@@ -36,7 +36,7 @@ const PRESET_DESCRIPTIONS: Record<string, string> = {
   map_type: "ข้อมูลผูกกับสถานที่: เลือกแผนที่แบบไหน?",
 };
 
-export default function Home({ presets, onSelectPreset, onStartBeginnerGuide, onPreviewPreset }: HomeProps) {
+export default function Home({ presets, onSelectPreset, onStartPresetQuiz, onStartBeginnerGuide }: HomeProps) {
   const presetMap = Object.fromEntries(presets.map((p) => [p.id, p]));
 
   return (
@@ -68,6 +68,7 @@ export default function Home({ presets, onSelectPreset, onStartBeginnerGuide, on
             presetIds={GUIDE_PATHS.beginner.presets}
             presetMap={presetMap}
             onSelectPreset={onSelectPreset}
+            onStartPresetQuiz={onStartPresetQuiz}
             onSelectSpecial={onStartBeginnerGuide}
             isBeginner
             highlight
@@ -80,6 +81,7 @@ export default function Home({ presets, onSelectPreset, onStartBeginnerGuide, on
             presetIds={GUIDE_PATHS.chartSelection.presets}
             presetMap={presetMap}
             onSelectPreset={onSelectPreset}
+            onStartPresetQuiz={onStartPresetQuiz}
           />
           <PathCard
             stepNumber={3}
@@ -89,6 +91,7 @@ export default function Home({ presets, onSelectPreset, onStartBeginnerGuide, on
             presetIds={GUIDE_PATHS.refinement.presets}
             presetMap={presetMap}
             onSelectPreset={onSelectPreset}
+            onStartPresetQuiz={onStartPresetQuiz}
           />
         </div>
 
@@ -97,7 +100,7 @@ export default function Home({ presets, onSelectPreset, onStartBeginnerGuide, on
           <h2 className="text-2xl font-bold text-slate-900 mb-4">🗺️ ทั้งหมด</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {presets.map((preset) => (
-              <PresetButton key={preset.id} preset={preset} onSelect={onSelectPreset} onPreview={onPreviewPreset} />
+              <PresetButton key={preset.id} preset={preset} onSelect={onSelectPreset} onStartQuiz={onStartPresetQuiz} />
             ))}
           </div>
         </div>
@@ -114,6 +117,7 @@ type PathCardProps = {
   presetIds: string[];
   presetMap: Record<string, TreePreset>;
   onSelectPreset: (id: string) => void;
+  onStartPresetQuiz?: (id: string) => void;
   onSelectSpecial?: () => void;
   isBeginner?: boolean;
   highlight?: boolean;
@@ -127,6 +131,7 @@ function PathCard({
   presetIds,
   presetMap,
   onSelectPreset,
+  onStartPresetQuiz,
   onSelectSpecial,
   isBeginner,
   highlight,
@@ -168,7 +173,7 @@ function PathCard({
                 return (
                   <button
                     key={id}
-                    onClick={() => onSelectPreset(id)}
+                    onClick={() => (onStartPresetQuiz ? onStartPresetQuiz(id) : onSelectPreset(id))}
                     className="group relative inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-slate-100 hover:bg-blue-100 hover:border-blue-300 border border-slate-200 text-slate-700 transition-all hover:shadow-md"
                     title={presetDesc}
                   >
@@ -191,10 +196,10 @@ function PathCard({
 type PresetButtonProps = {
   preset: TreePreset;
   onSelect: (id: string) => void;
-  onPreview?: (id: string) => void;
+  onStartQuiz: (id: string) => void;
 };
 
-function PresetButton({ preset, onSelect, onPreview }: PresetButtonProps) {
+function PresetButton({ preset, onSelect, onStartQuiz }: PresetButtonProps) {
   const description = PRESET_DESCRIPTIONS[preset.id] || "สำรวจ decision tree นี้";
   return (
     <div className="p-4 rounded-lg bg-white border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all hover:bg-blue-50">
@@ -202,21 +207,19 @@ function PresetButton({ preset, onSelect, onPreview }: PresetButtonProps) {
       <p className="text-sm text-slate-500 mb-3">{description}</p>
       <div className="flex gap-2">
         <button
-          onClick={() => onSelect(preset.id)}
+          onClick={() => onStartQuiz(preset.id)}
           className="flex-1 px-3 py-2 rounded-md bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all"
           title="เริ่มตอบคำถาม Quiz"
         >
           🎯 Quiz
         </button>
-        {onPreview && (
-          <button
-            onClick={() => onPreview(preset.id)}
-            className="flex-1 px-3 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-all"
-            title="ดูตัวอย่างผลลัพธ์ก่อน"
-          >
-            👁️ Preview
-          </button>
-        )}
+        <button
+          onClick={() => onSelect(preset.id)}
+          className="flex-1 px-3 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-all"
+          title="เปิดดูแผนผังคำถามก่อน (ยังไม่เริ่ม Quiz)"
+        >
+          🗺️ ดูแผนผัง
+        </button>
       </div>
     </div>
   );

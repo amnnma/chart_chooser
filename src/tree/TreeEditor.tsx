@@ -112,7 +112,6 @@ export default function TreeEditor() {
 
   const [showResult, setShowResult] = useState(false);
   const [selectedChartType, setSelectedChartType] = useState<string | null>(null);
-  const [isPreview, setIsPreview] = useState(false);
 
   const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id));
   const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -201,7 +200,6 @@ export default function TreeEditor() {
   const handleResultClose = useCallback(() => {
     setShowResult(false);
     setSelectedChartType(null);
-    setIsPreview(false);
     setQuizMode(false);
     setQuizId(ROOT_ID);
     setQuizTrail([ROOT_ID]);
@@ -235,24 +233,19 @@ export default function TreeEditor() {
     setViewMode("data-type-guide");
   }, []);
 
-  const handlePreviewPreset = useCallback((presetId: string) => {
-    // Map preset to chart type
-    const chartMap: Record<string, string> = {
-      "over_time": "line",
-      "single_total": "bar",
-      "several_totals": "bar",
-      "total_over_time": "area",
-      "include_zero": "bar",
-      "lower_scale_limit": "bar",
-      "map_type": "pie",
-      "bar_chart": "bar",
-    };
-    const chartType = chartMap[presetId] || "bar";
-    setSelectedChartType(chartType);
-    setShowResult(true);
-    setIsPreview(true);
-    setViewMode("home"); // Keep on home view while showing preview
-  }, []);
+  const startPresetQuiz = useCallback(
+    (id: string) => {
+      loadPreset(id as (typeof PRESETS)[number]["id"]);
+      requestAnimationFrame(() => {
+        setQuizMode(true);
+        setQuizId(ROOT_ID);
+        setQuizTrail([ROOT_ID]);
+        setQuizAnswers([]);
+        setSelectedId(ROOT_ID);
+      });
+    },
+    [loadPreset],
+  );
 
   const activeEdges = useMemo(() => {
     if (!quizMode) return undefined;
@@ -350,7 +343,12 @@ export default function TreeEditor() {
   return (
     <>
       {viewMode === "home" ? (
-        <Home presets={PRESETS} onSelectPreset={loadPreset as (id: string) => void} onStartBeginnerGuide={startBeginnerGuide} onPreviewPreset={handlePreviewPreset} />
+        <Home
+          presets={PRESETS}
+          onSelectPreset={loadPreset as (id: string) => void}
+          onStartPresetQuiz={startPresetQuiz}
+          onStartBeginnerGuide={startBeginnerGuide}
+        />
       ) : viewMode === "data-type-guide" ? (
         <div className="min-h-screen">
           <div className="p-4 bg-white border-b border-slate-200">
@@ -361,7 +359,7 @@ export default function TreeEditor() {
               ← กลับ
             </button>
           </div>
-          <DataTypeGuide onSelectDataType={loadPreset as (id: string) => void} />
+          <DataTypeGuide onSelectDataType={startPresetQuiz} />
         </div>
       ) : (
         <div className="flex h-full w-full flex-col">
@@ -489,25 +487,7 @@ export default function TreeEditor() {
                 ))}
               </div>
 
-              {showResult && selectedChartType && isPreview ? (
-                <ResultPage
-                  chartType={selectedChartType}
-                  quizTrail={[]}
-                  nodes={nodes}
-                  onEditConditions={handleEditConditions}
-                  onTryAnother={() => {
-                    setShowResult(false);
-                    setSelectedChartType(null);
-                    setIsPreview(false);
-                  }}
-                  onClose={() => {
-                    setShowResult(false);
-                    setSelectedChartType(null);
-                    setIsPreview(false);
-                  }}
-                  isPreview={isPreview}
-                />
-              ) : quizMode && quizNode ? (
+              {quizMode && quizNode ? (
                 quizNode.kind === "outcome" ? (
                   <ResultPage
                     chartType={outcomeChartType || "bar"}
@@ -516,7 +496,6 @@ export default function TreeEditor() {
                     onEditConditions={handleEditConditions}
                     onTryAnother={handleTryAnother}
                     onClose={handleResultClose}
-                    isPreview={isPreview}
                   />
                 ) : (
                   <QuizOverlay

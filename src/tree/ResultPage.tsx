@@ -8,7 +8,6 @@ type ResultPageProps = {
   onEditConditions: (editId: string) => void;
   onTryAnother: () => void;
   onClose: () => void;
-  isPreview?: boolean;
 };
 
 export default function ResultPage({
@@ -18,7 +17,6 @@ export default function ResultPage({
   onEditConditions,
   onTryAnother,
   onClose,
-  isPreview = false,
 }: ResultPageProps) {
   const [step, setStep] = useState(1);
   const guide = getChartGuide(chartType);
@@ -76,7 +74,6 @@ export default function ResultPage({
               quizTrail={quizTrail}
               onEditConditions={onEditConditions}
               onTryAnother={onTryAnother}
-              isPreview={isPreview}
             />
           )}
         </div>
@@ -274,13 +271,11 @@ function Step4WhatNext({
   quizTrail,
   onEditConditions,
   onTryAnother,
-  isPreview,
 }: {
   chartType: string;
   quizTrail: string[];
   onEditConditions: (editId: string) => void;
   onTryAnother: () => void;
-  isPreview?: boolean;
 }) {
   return (
     <div className="space-y-6">
@@ -295,27 +290,23 @@ function Step4WhatNext({
       <div className="space-y-4">
         <h4 className="font-semibold text-slate-900">🎯 ต่อไปคุณจะทำอะไร?</h4>
 
-        {/* Edit Conditions Button - ซ่อนในโหมด Preview */}
-        {!isPreview && (
-          <button
-            onClick={() => {
-              // ปกติจะแก้คำตอบสุดท้าย (ลึกสุด) ของ tree
-              const lastNodeId = quizTrail[quizTrail.length - 1];
-              onEditConditions(lastNodeId);
-            }}
-            className="w-full text-left rounded-lg border-2 border-cyan-300 bg-cyan-50 p-4 hover:bg-cyan-100 transition-all"
-          >
-            <div className="flex items-start gap-3">
-              <span className="text-xl">🔄</span>
-              <div>
-                <p className="font-semibold text-cyan-900">แก้ไขคำตอบ (Edit Conditions)</p>
-                <p className="text-xs text-cyan-800 mt-1">
-                  ไปกลับทั้งสิ้นเพื่อแก้คำตอบของคุณ แล้วดูว่าได้กราฟอื่นหรือไม่
-                </p>
-              </div>
+        <button
+          onClick={() => {
+            const lastNodeId = quizTrail[quizTrail.length - 1];
+            onEditConditions(lastNodeId);
+          }}
+          className="w-full text-left rounded-lg border-2 border-cyan-300 bg-cyan-50 p-4 hover:bg-cyan-100 transition-all"
+        >
+          <div className="flex items-start gap-3">
+            <span className="text-xl">🔄</span>
+            <div>
+              <p className="font-semibold text-cyan-900">แก้ไขคำตอบ (Edit Conditions)</p>
+              <p className="text-xs text-cyan-800 mt-1">
+                ย้อนกลับไปแก้เงื่อนไข แล้วดูว่าผลลัพธ์เปลี่ยนเป็นกราฟแบบไหน
+              </p>
             </div>
-          </button>
-        )}
+          </div>
+        </button>
 
         {/* Try Another Button */}
         <button
@@ -325,13 +316,9 @@ function Step4WhatNext({
           <div className="flex items-start gap-3">
             <span className="text-xl">🔁</span>
             <div>
-              <p className="font-semibold text-slate-900">
-                {isPreview ? "เริ่มต้อม Quiz" : "ลองใหม่กับข้อมูลอื่น"}
-              </p>
+              <p className="font-semibold text-slate-900">ลองใหม่กับข้อมูลอื่น</p>
               <p className="text-xs text-slate-800 mt-1">
-                {isPreview
-                  ? "เริ่มตอบคำถาม Decision Tree นี้"
-                  : "กลับไปที่เมนูหลักเพื่อเลือกประเภทข้อมูลใหม่"}
+                กลับไปที่เมนูหลักเพื่อเลือกประเภทข้อมูลใหม่
               </p>
             </div>
           </div>
