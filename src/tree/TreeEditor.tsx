@@ -58,7 +58,13 @@ function clampZoom(z: number) {
   return Math.min(1.75, Math.max(0.75, z));
 }
 
-function defaultZoomForPreset(id: (typeof PRESETS)[number]["id"]) {
+function isMobileScreen() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia?.("(max-width: 640px)")?.matches ?? false;
+}
+
+function defaultZoomForPreset(id: (typeof PRESETS)[number]["id"], isMobile: boolean) {
+  if (isMobile) return id === "bar_chart" ? 0.95 : 0.9;
   return id === "bar_chart" ? 1.25 : 1.2;
 }
 
@@ -113,13 +119,13 @@ export default function TreeEditor() {
   const [showResult, setShowResult] = useState(false);
   const [selectedChartType, setSelectedChartType] = useState<string | null>(null);
 
-  const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id));
+  const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id, isMobileScreen()));
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const size = useMemo(() => canvasSize(nodes), [nodes]);
   const editLocked = locked || quizMode;
 
-  const resetZoom = useCallback(() => setZoom(defaultZoomForPreset(presetId)), [presetId]);
+  const resetZoom = useCallback(() => setZoom(defaultZoomForPreset(presetId, isMobileScreen())), [presetId]);
 
   const toCanvasPoint = useCallback(
     (clientX: number, clientY: number) => {
@@ -167,7 +173,7 @@ export default function TreeEditor() {
   const loadPreset = useCallback(
     (nextId: (typeof PRESETS)[number]["id"]) => {
       const nextPreset = PRESETS.find((p) => p.id === nextId) ?? PRESETS[0];
-      const nextZoom = defaultZoomForPreset(nextPreset.id);
+      const nextZoom = defaultZoomForPreset(nextPreset.id, isMobileScreen());
       const root = nextPreset.nodes[ROOT_ID];
       setViewMode("tree");
       setPresetId(nextPreset.id);
@@ -179,18 +185,26 @@ export default function TreeEditor() {
       setQuizAnswers([]);
       setZoom(nextZoom);
 
+      // After layout, either fit to view (mobile) or center on root (desktop).
       requestAnimationFrame(() => {
-        const scroller = scrollRef.current;
-        if (!scroller || !root) return;
-        const rect = scroller.getBoundingClientRect();
-        scroller.scrollTo({
-          left: Math.max(0, root.x * nextZoom - rect.width / 2),
-          top: Math.max(0, root.y * nextZoom - rect.height / 2),
-          behavior: "smooth",
+        requestAnimationFrame(() => {
+          const scroller = scrollRef.current;
+          if (!scroller) return;
+          if (isMobileScreen()) {
+            fitToView();
+            return;
+          }
+          if (!root) return;
+          const rect = scroller.getBoundingClientRect();
+          scroller.scrollTo({
+            left: Math.max(0, root.x * nextZoom - rect.width / 2),
+            top: Math.max(0, root.y * nextZoom - rect.height / 2),
+            behavior: "smooth",
+          });
         });
       });
     },
-    [],
+    [fitToView],
   );
 
   const startBeginnerGuide = useCallback(() => {
@@ -362,7 +376,7 @@ export default function TreeEditor() {
           <DataTypeGuide onSelectDataType={startPresetQuiz} />
         </div>
       ) : (
-        <div className="flex h-full w-full flex-col">
+        <div className="flex min-h-screen h-[100dvh] w-full flex-col">
           <header className="border-b border-black/10 bg-white px-4 py-3">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
@@ -380,7 +394,7 @@ export default function TreeEditor() {
                     </div>
                     <div className="truncate text-xs text-slate-500">
                       {quizMode
-                        ? "ตอบคำถาม: Y = ใช่, N = ไม่, Backspace = ย้อน, Esc = ปิด"
+                        ? "ตอบคำถาม: กด Yes/No เพื่อไปต่อ"
                         : "คลิกเลือก node • Drag ย้าย • ดูรายละเอียดจากด้านขวา"}
                     </div>
                   </div>
@@ -454,7 +468,12 @@ export default function TreeEditor() {
 
       <div className="flex min-h-0 flex-1">
         <div className="min-h-0 flex-1 bg-slate-50">
-          <div ref={scrollRef} onClick={() => setSelectedId(null)} className="h-full w-full overflow-auto">
+          <div
+            ref={scrollRef}
+            onClick={() => setSelectedId(null)}
+            className="h-full w-full overflow-auto"
+            style={{ overscrollBehavior: "contain" }}
+          >
             <div className="relative" style={{ width: size.w * zoom, height: size.h * zoom }}>
               <div
                 className="absolute left-0 top-0"
@@ -595,7 +614,7 @@ export default function TreeEditor() {
           </div>
         )}
 
-        <div className="fixed bottom-3 left-3 z-20 sm:hidden">
+        <div className="fixed bottom-3 right-3 z-20 sm:hidden pb-[env(safe-area-inset-bottom)]">
           <div className="flex items-center gap-1 rounded-2xl border border-black/10 bg-white/95 p-1 shadow-lg backdrop-blur">
             <button
               onClick={() => setZoom((z) => clampZoom(Math.round((z - 0.15) * 100) / 100))}
@@ -652,7 +671,7 @@ function QuizOverlay(props: {
   const details = rest.join("\n").trim();
 
   return (
-    <div className="fixed left-3 right-3 top-3 z-30 max-w-[640px] rounded-2xl border border-amber-200 bg-amber-50/95 p-4 shadow-lg backdrop-blur md:left-4 md:right-auto md:top-4">
+    <div className="fixed left-3 right-3 bottom-3 top-auto z-30 max-w-[640px] max-h-[48vh] overflow-auto rounded-2xl border border-amber-200 bg-amber-50/95 p-4 shadow-lg backdrop-blur pb-[env(safe-area-inset-bottom)] md:left-4 md:right-auto md:top-4 md:bottom-auto md:max-h-none md:overflow-visible">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="text-xs font-semibold uppercase tracking-wide text-amber-700">
