@@ -34,7 +34,7 @@
 
   "pref_regions": {
     "id": "pref_regions",
-    "label": "Personal preference:\nPrefer colored regions?\n(ชอบระบายสีลงในพื้นที่?)",
+    "label": "Values tied to areas/regions?\n(ข้อมูลผูกกับพื้นที่/เขตใช่ไหม?)",
     "kind": "decision",
     "x": 840,
     "y": 240,
@@ -48,83 +48,31 @@
     "kind": "decision",
     "x": 1080,
     "y": 240,
-    "yes": "o_choropleth",
-    "no": "pref_regions",
+    "yes": "o_tile_map",
+    "no": "o_choropleth",
     "colorIdx": 4
   },
 
   "pref_dots": {
     "id": "pref_dots",
-    "label": "Personal preference:\nPrefer colored dots?\n(ชอบแบบจุดสีไหม?)",
+    "label": "Need to show magnitude at points?\n(ต้องโชว์ขนาด/ค่าที่ตำแหน่งจุดไหม?)",
     "kind": "decision",
     "x": 840,
     "y": 320,
-    "yes": "o_colored_dots",
-    "no": "pref_tiles",
+    "yes": "pref_bars_bubbles",
+    "no": "o_colored_dots",
     "colorIdx": 5
-  },
-
-  "pref_tiles": {
-    "id": "pref_tiles",
-    "label": "Personal preference:\nPrefer colored tiles?\n(ชอบแบบตารางสีไหม?)",
-    "kind": "decision",
-    "x": 840,
-    "y": 400,
-    "yes": "q_geo_important",
-    "no": "pref_bars_bubbles",
-    "colorIdx": 6
-  },
-  "q_geo_important": {
-    "id": "q_geo_important",
-    "label": "Underlying geography important?\n(ต้องการคงรูปร่างภูมิศาสตร์จริงไหม?)",
-    "kind": "decision",
-    "x": 1080,
-    "y": 400,
-    "yes": "pref_regions",
-    "no": "o_tile_map",
-    "colorIdx": 7
   },
 
   "pref_bars_bubbles": {
     "id": "pref_bars_bubbles",
-    "label": "Personal preference:\nBars or bubbles?\n(ชอบแบบแท่งหรือบับเบิลไหม?)",
+    "label": "Need more precise comparison than pattern?\n(ต้องการเทียบค่าให้แม่นยำมากกว่ามองแพตเทิร์นไหม?)",
     "kind": "decision",
     "x": 840,
     "y": 500,
-    "yes": "q_close_zero",
-    "no": "pref_tiles",
+    "yes": "o_bars",
+    "no": "o_bubbles",
     "colorIdx": 0
-  },
-
-  "q_close_zero": {
-    "id": "q_close_zero",
-    "label": "One or more values very close to zero?\n(มีค่าที่ใกล้ 0 มากไหม?)",
-    "kind": "decision",
-    "x": 1080,
-    "y": 500,
-    "yes": "pref_regions",
-    "no": "q_narrow_range",
-    "colorIdx": 1
-  },
-  "q_narrow_range": {
-    "id": "q_narrow_range",
-    "label": "All values in narrow range AND need to show small differences?\n(ค่าทั้งหมดอยู่ช่วงแคบและต้องโชว์ความต่างเล็กๆ ไหม?)",
-    "kind": "decision",
-    "x": 1320,
-    "y": 500,
-    "yes": "pref_regions",
-    "no": "q_bubbles_vs_bars",
-    "colorIdx": 2
-  },
-  "q_bubbles_vs_bars": {
-    "id": "q_bubbles_vs_bars",
-    "label": "What's more important?\nA bit easier to spot spatial patterns?\n(อยากเห็นแพตเทิร์นเชิงพื้นที่ง่ายขึ้นไหม?)",
-    "kind": "decision",
-    "x": 1560,
-    "y": 500,
-    "yes": "o_bubbles",
-    "no": "o_bars",
-    "colorIdx": 3
   },
 
   "o_non_map": {

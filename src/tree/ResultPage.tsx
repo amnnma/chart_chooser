@@ -277,6 +277,7 @@ function Step4WhatNext({
   onEditConditions: (editId: string) => void;
   onTryAnother: () => void;
 }) {
+  const related = getRelatedCharts(chartType);
   return (
     <div className="space-y-6">
       <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 p-6">
@@ -325,6 +326,22 @@ function Step4WhatNext({
         </button>
       </div>
 
+      {related.length ? (
+        <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <p className="text-xs font-semibold text-slate-900 mb-2">ดูเพิ่มเติม (กราฟที่เกี่ยวข้อง)</p>
+          <div className="flex flex-wrap gap-2">
+            {related.map((name) => (
+              <span
+                key={name}
+                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
         <p className="text-xs font-semibold text-blue-900 uppercase mb-2">📚 นี่คือ Training Wheels</p>
         <p className="text-xs text-blue-800">
@@ -365,6 +382,31 @@ function getChartTypeInThai(chartType: string): string {
     map_lines: "Lines on Map (เส้นบนแผนที่)",
   };
   return map[chartType] || chartType;
+}
+
+function getRelatedCharts(chartType: string): string[] {
+  const related: Record<string, string[]> = {
+    bar: ["Clustered Bar", "Stacked Bar", "Lollipop"],
+    line: ["Step Chart", "Area Chart", "Sparkline"],
+    pie: ["Donut", "Stacked Bar", "Treemap"],
+    dot: ["Lollipop", "Strip Plot"],
+    bumps: ["Slope Chart", "Line Chart"],
+    area: ["Line Chart", "Stacked Area"],
+    scatter: ["Bubble Chart", "Hexbin"],
+    choropleth: ["Tile Map", "Dot Map"],
+    tile_map: ["Choropleth", "Dot Map"],
+    map_dots: ["Bubbles on Map", "Bars on Map"],
+    map_bubbles: ["Dot Map", "Bars on Map"],
+    map_bars: ["Dot Map", "Bubbles on Map"],
+    map_lines: ["Flow Map", "Animated Line Map"],
+    stacked_bar: ["100% Stacked Bar", "Stacked Area"],
+    stacked_bar_100: ["Stacked Bar", "100% Stacked Area"],
+    stacked_area: ["Area Chart", "100% Stacked Area"],
+    stacked_area_100: ["100% Stacked Bar", "Stacked Area"],
+    waterfall: ["Bridge Chart", "Stacked Bar"],
+    treemap: ["Sunburst", "Packed Bubbles"],
+  };
+  return related[chartType] ?? [];
 }
 
 type ChartGuide = {

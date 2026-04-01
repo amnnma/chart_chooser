@@ -102,6 +102,23 @@ function chartTypeFromOutcome(node: TreeNode): string {
   return "bar";
 }
 
+function pathQuestionTitle(label: string): string {
+  const lines = String(label || "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (!lines.length) return "Question";
+
+  // Drop generic headers like "Personal preference:"
+  const cleaned = lines.filter((l) => !/^personal preference[:?]?$/i.test(l));
+
+  // Prefer the first non-parenthetical question-ish line
+  const pickFrom = cleaned.length ? cleaned : lines;
+  const nonParen = pickFrom.filter((l) => !(l.startsWith("(") && l.endsWith(")")));
+  const questionLike = nonParen.find((l) => l.includes("?")) ?? nonParen[0] ?? pickFrom[0];
+  return questionLike || "Question";
+}
+
 export default function TreeEditor() {
   const [viewMode, setViewMode] = useState<"home" | "data-type-guide" | "tree">("home");
   const [presetId, setPresetId] = useState<(typeof PRESETS)[number]["id"]>(() => PRESETS[0].id);
@@ -536,6 +553,7 @@ export default function TreeEditor() {
                     trailNodes={quizTrail.map((id) => nodes[id]).filter(Boolean)}
                     trail={quizTrail}
                     answers={quizAnswers}
+                    compact={isCompact}
                     onYes={() => answerQuiz("yes")}
                     onNo={() => answerQuiz("no")}
                     onBack={backQuiz}
@@ -673,6 +691,7 @@ function QuizOverlay(props: {
   trailNodes: TreeNode[];
   trail: string[];
   answers: BranchKind[];
+  compact: boolean;
   canYes: boolean;
   canNo: boolean;
   onYes: () => void;
@@ -717,27 +736,34 @@ function QuizOverlay(props: {
 
       {props.answers.length ? (
         <div className="mt-3 rounded-xl border border-amber-200 bg-white/70 p-3 text-xs text-slate-700">
-          <div className="font-semibold text-slate-900">Path</div>
-          <div className="mt-2 space-y-1">
-            {props.answers.map((a, i) => {
-              const node = props.trailNodes[i];
-              const q = (node?.label ?? props.trail[i]).split("\n")[0];
-              return (
-                <div key={i} className="flex items-center gap-2">
-                  <span className="w-5 text-right font-mono text-[11px] text-slate-500">{i + 1}.</span>
-                  <span className="truncate">{q}</span>
-                  <span
-                    className={[
-                      "rounded-md px-2 py-0.5 text-[10px] font-semibold",
-                      a === "yes" ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800",
-                    ].join(" ")}
-                  >
-                    {a.toUpperCase()}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          <details open={!props.compact}>
+            <summary className="cursor-pointer list-none select-none">
+              <div className="flex items-center justify-between gap-3">
+                <div className="font-semibold text-slate-900">Path</div>
+                <div className="text-[11px] text-slate-500">{props.answers.length} steps</div>
+              </div>
+            </summary>
+            <div className="mt-2 space-y-1">
+              {props.answers.map((a, i) => {
+                const node = props.trailNodes[i];
+                const q = pathQuestionTitle(node?.label ?? props.trail[i]);
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="w-5 text-right font-mono text-[11px] text-slate-500">{i + 1}.</span>
+                    <span className="truncate">{q}</span>
+                    <span
+                      className={[
+                        "rounded-md px-2 py-0.5 text-[10px] font-semibold",
+                        a === "yes" ? "bg-emerald-100 text-emerald-800" : "bg-rose-100 text-rose-800",
+                      ].join(" ")}
+                    >
+                      {a === "yes" ? "Yes" : "No"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </details>
         </div>
       ) : null}
 
