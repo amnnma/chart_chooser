@@ -58,13 +58,13 @@ function clampZoom(z: number) {
   return Math.min(1.75, Math.max(0.75, z));
 }
 
-function isMobileScreen() {
+function isCompactScreen() {
   if (typeof window === "undefined") return false;
-  return window.matchMedia?.("(max-width: 640px)")?.matches ?? false;
+  return window.matchMedia?.("(max-width: 1024px)")?.matches ?? false;
 }
 
-function defaultZoomForPreset(id: (typeof PRESETS)[number]["id"], isMobile: boolean) {
-  if (isMobile) return id === "bar_chart" ? 0.95 : 0.9;
+function defaultZoomForPreset(id: (typeof PRESETS)[number]["id"], isCompact: boolean) {
+  if (isCompact) return id === "bar_chart" ? 0.95 : 0.9;
   return id === "bar_chart" ? 1.25 : 1.2;
 }
 
@@ -110,6 +110,7 @@ export default function TreeEditor() {
   const locked = preset.locked;
   const [nodes, setNodes] = useState<TreeState>(() => translateToPositive(preset.nodes));
   const [selectedId, setSelectedId] = useState<string | null>(ROOT_ID);
+  const [isCompact, setIsCompact] = useState(() => isCompactScreen());
 
   const [quizMode, setQuizMode] = useState(false);
   const [quizId, setQuizId] = useState<string>(ROOT_ID);
@@ -119,13 +120,26 @@ export default function TreeEditor() {
   const [showResult, setShowResult] = useState(false);
   const [selectedChartType, setSelectedChartType] = useState<string | null>(null);
 
-  const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id, isMobileScreen()));
+  const [zoom, setZoom] = useState(() => defaultZoomForPreset(PRESETS[0].id, isCompact));
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const size = useMemo(() => canvasSize(nodes), [nodes]);
   const editLocked = locked || quizMode;
 
-  const resetZoom = useCallback(() => setZoom(defaultZoomForPreset(presetId, isMobileScreen())), [presetId]);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(max-width: 1024px)");
+    const onChange = () => setIsCompact(mq.matches);
+    onChange();
+    if (mq.addEventListener) mq.addEventListener("change", onChange);
+    else mq.addListener(onChange);
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", onChange);
+      else mq.removeListener(onChange);
+    };
+  }, []);
+
+  const resetZoom = useCallback(() => setZoom(defaultZoomForPreset(presetId, isCompact)), [isCompact, presetId]);
 
   const toCanvasPoint = useCallback(
     (clientX: number, clientY: number) => {
@@ -173,7 +187,7 @@ export default function TreeEditor() {
   const loadPreset = useCallback(
     (nextId: (typeof PRESETS)[number]["id"]) => {
       const nextPreset = PRESETS.find((p) => p.id === nextId) ?? PRESETS[0];
-      const nextZoom = defaultZoomForPreset(nextPreset.id, isMobileScreen());
+      const nextZoom = defaultZoomForPreset(nextPreset.id, isCompact);
       const root = nextPreset.nodes[ROOT_ID];
       setViewMode("tree");
       setPresetId(nextPreset.id);
@@ -190,7 +204,7 @@ export default function TreeEditor() {
         requestAnimationFrame(() => {
           const scroller = scrollRef.current;
           if (!scroller) return;
-          if (isMobileScreen()) {
+          if (isCompact) {
             fitToView();
             return;
           }
@@ -204,7 +218,7 @@ export default function TreeEditor() {
         });
       });
     },
-    [fitToView],
+    [fitToView, isCompact],
   );
 
   const startBeginnerGuide = useCallback(() => {
@@ -499,7 +513,7 @@ export default function TreeEditor() {
                     dimmed={quizMode && !activeNodes?.has(n.id)}
                     onSelect={(id) => setSelectedId(id)}
                     onDrag={(id, x, y) => updateNode(id, { x, y })}
-                    locked={false}
+                    locked={isCompact}
                     styleMode={styleMode}
                     toCanvasPoint={toCanvasPoint}
                   />
